@@ -11,3 +11,6 @@ env/
 .vscode/
 *.swp
 .DS_Store
+
+# Keep official transcript local only (not in public repo)
+static/files/transcript.pdf
