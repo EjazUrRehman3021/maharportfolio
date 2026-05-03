@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home Automation System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<a href="/projects" class="back-btn">← Back to Projects</a>
+
+<h1>Home Automation System</h1>
+
+<p class="project-intro">
+This is an IoT-based home automation project designed to control home appliances remotely using a mobile device and voice commands via Google Assistant.
+</p>
+
+<hr>
+
+<h2>🛠 Technologies & Components Used</h2>
+<ul>
+    <li><strong>Microcontroller:</strong> NodeMCU ESP8266</li>
+    <li><strong>Voice Assistant:</strong> Google Assistant</li>
+    <li><strong>Relay Module:</strong> Relay Board (for controlling high-voltage appliances)</li>
+    <li><strong>Loads:</strong> Fan, Bulb, Motor</li>
+    <li><strong>Interface:</strong> Mobile Phone</li>
+</ul>
+
+<h2>✨ Key Features</h2>
+<ul>
+    <li>Remote control of appliances via smartphone</li>
+    <li>Voice control integration with Google Assistant</li>
+    <li>Wi-Fi connectivity using ESP8266</li>
+    <li>Scalable to add more appliances</li>
+</ul>
+
+<hr>
+
+<h2>⚙ Project Requirements</h2>
+
+<p>
+To develop a project like this Home Automation System, the following
+hardware, software, and tools are required:
+</p>
+
+<h3>💻 Software Requirements</h3>
+<ul>
+    <li>Arduino IDE (for programming the ESP8266)</li>
+    <li>C++ (for ESP8266 firmware)</li>
+    <li>Google Assistant App (on Mobile)</li>
+</ul>
+
+<h3>🔌 Hardware Components</h3>
+<ul>
+    <li>NodeMCU (ESP8266)</li>
+    <li>Relay Module</li>
+    <li>Jumper Wires & Breadboard</li>
+    <li>Power Supply (5V)</li>
+</ul>
+
+<h3>☁ Server / Cloud Integration</h3>
+<p>
+To connect Google Assistant with the NodeMCU ESP8266, an IoT Cloud Server acts as a bridge. Common platforms used for this include:
+</p>
+<ul>
+    <li><strong>Sinric Pro</strong> or <strong>Blynk</strong>: Receives commands from Google Assistant and forwards them to the ESP8266 over the internet.</li>
+    <li><strong>IFTTT & Adafruit IO</strong>: Another popular server combination for routing voice commands to IoT devices.</li>
+</ul>
+
+<hr>
+
+<h2>🖼 System Architecture</h2>
+
+<p>The system architecture consists of a Mobile device sending commands to Google Assistant, which communicates with the NodeMCU ESP8266. The ESP8266 then triggers a Relay Board to operate the connected appliances (Fan, Bulb, Motor).</p>
+
+<div class="project-images">
+    <!-- Note: Please save the uploaded image as architecture.jpg in static/images/home_automation/ -->
+    <img src="{{ url_for('static', filename='images/home_automation/architecture.jpg') }}" alt="System Architecture Diagram">
+</div>
+
+<hr>
+
+<h2>📝 Firmware Source Code</h2>
+<p>Below is the ESP8266 Arduino source code used for this project to connect with Sinric Pro and Google Assistant.</p>
+<pre style="background-color: #2b2b2b; color: #f8f8f2; padding: 15px; border-radius: 8px; overflow-x: auto; font-family: monospace; font-size: 14px;"><code>
+#include &lt;ESP8266WiFi.h&gt;
+#include &lt;SinricPro.h&gt;
+#include &lt;SinricProSwitch.h&gt;
+#include &lt;EEPROM.h&gt;
+
+// ===== WiFi =====
+#define WIFI_SSID "YOUR_WIFI_NAME"
+#define WIFI_PASS "YOUR_WIFI_PASSWORD"
+
+// ===== Sinric =====
+#define APP_KEY     "YOUR_APP_KEY"
+#define APP_SECRET  "YOUR_APP_SECRET"
+
+// ===== Device IDs =====
+#define RELAY1_ID "DEVICE_ID_1"
+#define RELAY2_ID "DEVICE_ID_2"
+#define RELAY3_ID "DEVICE_ID_3"
+#define RELAY4_ID "DEVICE_ID_4"
+
+// ===== Pins =====
+int relayPins[] = {D1, D2, D5, D6};
+int buttonPins[] = {D3, D4, D7, D8};
+
+bool relayState[4] = {false, false, false, false};
+
+#define EEPROM_SIZE 10
+
+// ===== EEPROM =====
+void saveStates() {
+  for (int i = 0; i < 4; i++) {
+    EEPROM.write(i, relayState[i]);
+  }
+  EEPROM.commit();
+}
+
+void loadStates() {
+  for (int i = 0; i < 4; i++) {
+    relayState[i] = EEPROM.read(i);
+  }
+}
+
+// ===== Google Assistant Handler =====
+bool onPowerState(const String &deviceId, bool &state) {
+
+  int index = -1;
+
+  if (deviceId == RELAY1_ID) index = 0;
+  else if (deviceId == RELAY2_ID) index = 1;
+  else if (deviceId == RELAY3_ID) index = 2;
+  else if (deviceId == RELAY4_ID) index = 3;
+
+  if (index != -1) {
+    relayState[index] = state;
+    digitalWrite(relayPins[index], state ? LOW : HIGH);
+    saveStates();
+  }
+
+  return true;
+}
+
+// ===== Setup =====
+void setup() {
+  Serial.begin(115200);
+  EEPROM.begin(EEPROM_SIZE);
+
+  loadStates();
+
+  // Relay setup
+  for (int i = 0; i < 4; i++) {
+    pinMode(relayPins[i], OUTPUT);
+    digitalWrite(relayPins[i], relayState[i] ? LOW : HIGH);
+  }
+
+  // Button setup
+  for (int i = 0; i < 4; i++) {
+    pinMode(buttonPins[i], INPUT_PULLUP);
+  }
+
+  // WiFi
+  WiFi.begin(WIFI_SSID, WIFI_PASS);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  // Sinric setup
+  SinricProSwitch &r1 = SinricPro[RELAY1_ID];
+  SinricProSwitch &r2 = SinricPro[RELAY2_ID];
+  SinricProSwitch &r3 = SinricPro[RELAY3_ID];
+  SinricProSwitch &r4 = SinricPro[RELAY4_ID];
+
+  r1.onPowerState(onPowerState);
+  r2.onPowerState(onPowerState);
+  r3.onPowerState(onPowerState);
+  r4.onPowerState(onPowerState);
+
+  SinricPro.begin(APP_KEY, APP_SECRET);
+}
+
+// ===== Loop =====
+void loop() {
+  SinricPro.handle();
+
+  // Manual button control
+  for (int i = 0; i < 4; i++) {
+    if (digitalRead(buttonPins[i]) == LOW) {
+      delay(200); // debounce
+
+      relayState[i] = !relayState[i];
+      digitalWrite(relayPins[i], relayState[i] ? LOW : HIGH);
+
+      saveStates();
+
+      // Sync with Google Assistant
+      switch(i) {
+        case 0: SinricPro[RELAY1_ID].sendPowerStateEvent(relayState[i]); break;
+        case 1: SinricPro[RELAY2_ID].sendPowerStateEvent(relayState[i]); break;
+        case 2: SinricPro[RELAY3_ID].sendPowerStateEvent(relayState[i]); break;
+        case 3: SinricPro[RELAY4_ID].sendPowerStateEvent(relayState[i]); break;
+      }
+
+      while(digitalRead(buttonPins[i]) == LOW); // wait release
+    }
+  }
+}
+</code></pre>
+<div style="margin-top: 15px;">
+    <a href="{{ url_for('static', filename='files/Home_Automation.ino') }}" download class="btn-primary" style="display: inline-block; text-decoration: none; padding: 10px 20px;">Download Source Code (.ino)</a>
+</div>
+
+<h2>📌 Project Note</h2>
+<p>
+This project demonstrates the practical application of Internet of Things (IoT) concepts, showcasing how hardware and cloud services can be integrated to create a smart home environment.
+</p>
+
+</body>
+</html>

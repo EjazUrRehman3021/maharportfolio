@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Skills - Ejaz ur Rehman{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 800px;">
+    <h1><i class="fas fa-microchip" style="color: var(--accent-color);"></i> My Skills</h1>
+    <div class="skills-container" style="text-align: left;">
+        <div class="skill-bar"><div class="skill-level" data-width="95%">AC Repairing</div></div>
+        <div class="skill-bar"><div class="skill-level" data-width="90%">Inverters</div></div>
+        <div class="skill-bar"><div class="skill-level" data-width="85%">Embedded System and Firmware</div></div>
+        <div class="skill-bar"><div class="skill-level" data-width="80%">ESP32 / IoT Projects</div></div>
+        <div class="skill-bar"><div class="skill-level" data-width="75%">Python & Flask</div></div>
+    </div>
+</div>
+<script>
+    window.onload = function() {
+        let skills = document.querySelectorAll('.skill-level');
+        skills.forEach(skill => {
+            let width = skill.getAttribute('data-width');
+            setTimeout(() => { skill.style.width = width; }, 200);
+        });
+    }
+</script>
+{% endblock %}

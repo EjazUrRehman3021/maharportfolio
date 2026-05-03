@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Projects - Ejaz ur Rehman{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 1200px;">
+    <h1><i class="fas fa-project-diagram" style="color: var(--accent-color);"></i> My Projects</h1>
+    <div class="projects-grid">
+        <div class="project">
+            <i class="fas fa-home fa-3x" style="color: var(--accent-color); margin-bottom: 15px;"></i>
+            <h3>Home Automation System</h3>
+            <p>Automated home system controlling appliances remotely.</p>
+            <a href="/projects/home_automation" class="btn-primary" style="margin-top: 15px; width: 100%; box-sizing: border-box;">View Details</a>
+        </div>
+        <div class="project">
+            <i class="fas fa-mobile-alt fa-3x" style="color: var(--accent-color); margin-bottom: 15px;"></i>
+            <h3>Mobile Control via ESP32</h3>
+            <p>Control mobile via ESP32 and copper wire interface.</p>
+            <a href="/projects/esp32_mobile" class="btn-primary" style="margin-top: 15px; width: 100%; box-sizing: border-box;">View Details</a>
+        </div>
+        <div class="project">
+            <i class="fas fa-hospital-user fa-3x" style="color: var(--accent-color); margin-bottom: 15px;"></i>
+            <h3>Patient Management System</h3>
+            <p>Web-based project to manage patient records efficiently.</p>
+            <a href="/projects/patient_management" class="btn-primary" style="margin-top: 15px; width: 100%; box-sizing: border-box;">View Details</a>
+        </div>
+        <div class="project">
+            <i class="fas fa-wave-square fa-3x" style="color: var(--accent-color); margin-bottom: 15px;"></i>
+            <h3>FIR Filter Design</h3>
+            <p>Digital Signal Processing project focusing on Finite Impulse Response filters.</p>
+            <a href="/projects/fir_filter" class="btn-primary" style="margin-top: 15px; width: 100%; box-sizing: border-box;">View Details</a>
+        </div>
+        <div class="project">
+            <i class="fas fa-bolt fa-3x" style="color: var(--accent-color); margin-bottom: 15px;"></i>
+            <h3>Inverters</h3>
+            <p>Maintenance, repair, and troubleshooting of modern inverter systems.</p>
+            <a href="/projects/inverters" class="btn-primary" style="margin-top: 15px; width: 100%; box-sizing: border-box;">View Details</a>
+        </div>
+        <div class="project">
+            <i class="fas fa-snowflake fa-3x" style="color: var(--accent-color); margin-bottom: 15px;"></i>
+            <h3>Air Conditioner</h3>
+            <p>Servicing and diagnosis of AC units for optimal cooling performance.</p>
+            <a href="/projects/air_conditioner" class="btn-primary" style="margin-top: 15px; width: 100%; box-sizing: border-box;">View Details</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

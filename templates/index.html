@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <img src="{{ url_for('static', filename='images/profile.jpg') }}" class="profile" alt="Ejaz ur Rehman" onerror="this.src='https://ui-avatars.com/api/?name=Ejaz+Rehman&background=0a0e17&color=00f2fe&size=180&bold=true'">
+    
+    <h1>Ejaz ur Rehman</h1>
+    <h2>6th Semester B.Sc Electronics</h2>
+    <p>Passionate Electronics Expert specializing in AC Repairing, Inverters, and advanced Electronics Projects. Blending hardware knowledge with innovative solutions.</p>
+    
+    <div class="hero-buttons">
+        <a href="/projects" class="btn-primary"><i class="fas fa-bolt" style="margin-right: 8px;"></i> View My Work</a>
+        <a href="/contact" class="btn-primary" style="background: var(--accent-color); color: var(--bg-color);"><i class="fas fa-paper-plane" style="margin-right: 8px;"></i> Contact Me</a>
+    </div>
+</div>
+{% endblock %}

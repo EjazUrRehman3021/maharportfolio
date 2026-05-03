@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}About - Ejaz ur Rehman{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1><i class="fas fa-user-circle" style="color: var(--accent-color);"></i> About Me</h1>
+    <div style="background: var(--card-bg); border: 1px solid var(--card-border); padding: 30px; border-radius: 16px; margin-top: 30px; text-align: left; backdrop-filter: blur(10px);">
+        <p style="color: var(--text-primary); font-size: 1.2rem;">I am <strong>Ejaz ur Rehman</strong>, a 6th semester B.Sc Electronics student maintaining an excellent academic record with a <strong>CGPA of 3.58</strong>. I have robust hands-on experience in electronics hardware maintenance and repairing, as well as developing advanced embedded system projects with custom firmware.</p>
+        <p>I am a fully expert technician in AC repairing kits, inverters, and other electronic devices, and I am deeply passionate about creating innovative hardware and web-based solutions.</p>
+        
+        <div style="margin-top: 25px;">
+            <a href="{{ url_for('static', filename='files/transcript.pdf') }}" target="_blank" class="btn-primary" style="text-decoration: none;">
+                <i class="fas fa-file-pdf" style="margin-right: 8px;"></i> View Academic Transcript
+            </a>
+            <p style="font-size: 0.9rem; margin-top: 10px; color: var(--text-secondary);">
+                <em>* The transcript file should be uploaded to: static/files/transcript.pdf</em>
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock %}
